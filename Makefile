@@ -1,4 +1,4 @@
-NAMESPACE=llimllib
+NAMESPACE=tim77
 APP=limbo
 
 .PHONY: testall
@@ -42,17 +42,19 @@ publish:
 flake8:
 	flake8 limbo test
 
-NAMESPACE=petergrace
-APP=limbo
-
 .PHONY: docker_build
 docker_build:
-	docker build -f Dockerfile.dev -t ${NAMESPACE}/${APP} .
+	docker build -f Dockerfile.test -t ${NAMESPACE}/${APP}-test .
+	docker build --build-arg BASE=${NAMESPACE}/${APP}-test -f Dockerfile.run -t ${NAMESPACE}/${APP} .
+
+.PHONY: docker_test
+docker_test:
+	docker run -e LANG=en_US.UTF-8 ${NAMESPACE}/${APP}-test
 
 .PHONY: docker_run
 docker_run:
 	docker run -d -e SLACK_TOKEN=${SLACK_TOKEN} ${NAMESPACE}/${APP}
 
 .PHONY: docker_stop
-docker_clean:
-	docker stop $(docker ps -a -q  --filter ancestor=petergrace/limbo --format="{{.ID}}")
+docker_stop:
+	docker stop `docker ps -q --filter ancestor=${NAMESPACE}/${APP} --format="{{.ID}}"`
