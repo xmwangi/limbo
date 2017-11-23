@@ -133,6 +133,17 @@ def handle_message(event, server):
         logger.debug("skipping message {} no user found or user is "
             "self".format(event))
         return
+
+    # skip messages that don't include our username 
+    if server.config.get("needmention"):
+        text = event.get("text", "")
+        # TODO: make sure server.slack.userid is RE-safe
+        match = re.search("<@{}>".format(server.slack.userid), text)
+        if not match:
+            logger.debug("skipping message {} because {} is not "
+                         "mentioned in it ".format(event,server.slack.userid))
+            return
+
     return "\n".join(run_hook(server.hooks, subtype, event, server))
 
 def basic_handle(event_name):
@@ -162,6 +173,7 @@ def init_config():
     getif(config, "logfile", "LIMBO_LOGFILE")
     getif(config, "logformat", "LIMBO_LOGFORMAT")
     getif(config, "plugins", "LIMBO_PLUGINS")
+    getif(config, "needmention", "LIMBO_NEEDMENTION")
 
     return config
 

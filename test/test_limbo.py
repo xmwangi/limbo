@@ -102,6 +102,39 @@ def test_handle_message_ignores_slackbot():
     event = {"user": "USLACKBOT"}
     assert limbo.handle_message(event, server) == None
 
+def test_handle_message_ignores_nomention():
+    msg = u"!echo Iñtërnâtiônàlizætiøn bot"
+    event = {"bot_id": "2", "text": msg, "subtype": "bot_message"}
+
+    config = {"needmention": "true"}
+    slack = limbo.FakeSlack()
+    hooks = limbo.init_plugins("test/plugins")
+    server = limbo.FakeServer(config=config, slack=slack, hooks=hooks)
+
+    assert limbo.handle_message(event, server) == None
+
+def test_handle_message_ignores_wrongmention():
+    msg = u"!echo Iñtërnâtiônàlizætiøn bot <@3>"
+    event = {"bot_id": "2", "text": msg, "subtype": "bot_message"}
+
+    config = {"needmention": "true"}
+    slack = limbo.FakeSlack()
+    hooks = limbo.init_plugins("test/plugins")
+    server = limbo.FakeServer(config=config, slack=slack, hooks=hooks)
+
+    assert limbo.handle_message(event, server) == None
+
+def test_handle_message_handles_mention():
+    msg = u"!echo Iñtërnâtiônàlizætiøn <@1>"
+    event = {"user": "2", "text": msg}
+
+    config = {"needmention": "true"}
+    slack = limbo.FakeSlack()
+    hooks = limbo.init_plugins("test/plugins")
+    server = limbo.FakeServer(config=config, slack=slack, hooks=hooks)
+
+    assert limbo.handle_message(event, server) == msg
+
 def test_handle_message_basic():
     msg = u"!echo Iñtërnâtiônàlizætiøn"
     event = {"user": "2", "text": msg}

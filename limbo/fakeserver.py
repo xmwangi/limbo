@@ -4,7 +4,7 @@ import time
 from .slack import User, Bot
 
 class FakeServer(object):
-    def __init__(self, slack=None, config=None, hooks=None, db=None):
+    def __init__(self, slack=None, config={}, hooks=None, db=None):
         self.slack = slack or FakeSlack()
         self.config = config
         self.hooks = hooks
