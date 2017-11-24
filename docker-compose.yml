@@ -1,0 +1,8 @@
+version: "2"
+
+services:
+  limbo:
+    env_file: limbo.env
+    environment:
+      SLACK_TOKEN:
+    image: tim77/limbo
