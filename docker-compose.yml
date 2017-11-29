@@ -5,4 +5,5 @@ services:
     env_file: limbo.env
     environment:
       SLACK_TOKEN:
-    image: tim77/limbo
+    image: 560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77-rstata/limbo
+#    image: tim77/limbo

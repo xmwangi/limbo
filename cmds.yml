@@ -1,0 +1,21 @@
+# A docker-compose file that runs commands out of a known image
+
+version: "2"
+
+services:
+  aws:
+    env_file: limbo.env
+    environment:
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+    image: tim77/limbo-test
+    entrypoint: [ "/usr/local/bin/aws" ]
+
+  ecs:
+    env_file: limbo.env
+    environment:
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+      SLACK_TOKEN:
+    image: tim77/limbo-test
+    entrypoint: /usr/local/bin/ecs-cli
