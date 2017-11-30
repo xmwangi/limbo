@@ -22,4 +22,4 @@ openssl aes-256-cbc \
 source secrets.sh
 
 bin/ecr_push.sh
-bin/ecs_deploy.sh
+bin/ecs_deploy.sh $TRAVIS_BRANCH
