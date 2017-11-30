@@ -4,16 +4,16 @@ version: "2"
 
 services:
   aws:
-    env_file: limbo.env
     environment:
+      LIMBO_NEEDMENTION: 'true'
       AWS_ACCESS_KEY_ID:
       AWS_SECRET_ACCESS_KEY:
     image: tim77/limbo-test
     entrypoint: [ "/usr/local/bin/aws" ]
 
   ecs:
-    env_file: limbo.env
     environment:
+      LIMBO_NEEDMENTION: 'true'
       AWS_ACCESS_KEY_ID:
       AWS_SECRET_ACCESS_KEY:
       SLACK_TOKEN:

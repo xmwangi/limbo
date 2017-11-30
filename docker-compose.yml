@@ -2,8 +2,8 @@ version: "2"
 
 services:
   limbo:
-    env_file: limbo.env
     environment:
+      LIMBO_NEEDMENTION: 'true'
       SLACK_TOKEN:
     image: 560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77-rstata/limbo
 #    image: tim77/limbo
