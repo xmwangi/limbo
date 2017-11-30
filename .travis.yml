@@ -16,8 +16,8 @@ script:
   - make docker_test
 
 after_success:
-  - ./ecr_push.sh
-  - ./ecs_deploy.sh
+  - bin/ecr_push.sh
+  - bin/ecs_deploy.sh
 
 notifications:
   email: false
