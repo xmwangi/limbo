@@ -1,4 +1,4 @@
-#!/bin/sh -ve
+#!/bin/bash -ve
 
 export IS_WIP=`expr "$TRAVIS_BRANCH" : ".*-\(wip$\)"`
 export STUDENT=`expr "$TRAVIS_BRANCH" : "\(.*\)-[a-z]*$"`
