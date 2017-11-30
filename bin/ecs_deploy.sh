@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -ve
 
 if [$# -ne 1]; then
   echo "Usage: $0 project-name"

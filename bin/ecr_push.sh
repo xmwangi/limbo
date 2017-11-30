@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -ve
 
 ## Acrobatics here works around both awscli and MacOS problems I've
 ## been encountering
