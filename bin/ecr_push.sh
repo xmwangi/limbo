@@ -1,6 +1,12 @@
 #!/bin/sh
 
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+  echo Skipping push for pull request
+  exit 0
+fi
+
 if [ "$TRAVIS_BRANCH" != "rstata-wip" ]; then
+  echo Skipping push for non-wip branch
   exit 0
 fi
 
