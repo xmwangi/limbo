@@ -22,7 +22,9 @@ openssl aes-256-cbc \
   -K $encrypted_a8cf50fc24e7_key -iv $encrypted_a8cf50fc24e7_iv \
   -in secrets/${BOTNAME}.sh.enc -out secrets.sh -d
 
+set +v # Don't reveal secrets to output log
 source ./secrets.sh
+set -v
 
 if [ "$TYPE" = "master" ]; then
   export SLACK_TOKEN=$MASTER_SLACK_TOKEN
