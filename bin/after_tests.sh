@@ -23,10 +23,15 @@ openssl aes-256-cbc \
   -in secrets/${BOTNAME}.sh.enc -out secrets.sh -d
 
 source ./secrets.sh
+
 if [ "$TYPE" = "master" ]; then
   export SLACK_TOKEN=$MASTER_SLACK_TOKEN
 else
   export SLACK_TOKEN=$WIP_SLACK_TOKEN
+fi
+if [ "$SLACK_TOKEN" = "" ]; then
+  echo Missing ${TYPE}_SLACK_TOKEN
+  exit 1
 fi
 
 bin/ecr_push.sh
