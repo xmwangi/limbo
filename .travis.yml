@@ -12,9 +12,7 @@ before_script:
 
 script:
   - make docker_test
-
-after_success:
-  - bin/after_success.sh
+  - bin/after_tests.sh
 
 notifications:
   email: false
