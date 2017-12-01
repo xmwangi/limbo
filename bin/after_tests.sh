@@ -16,7 +16,7 @@ fi
 echo Student: $STUDENT
 
 openssl aes-256-cbc \
-  -K $encrypted_887fc2baaf3c_key -iv $encrypted_887fc2baaf3c_iv \
+  -K $encrypted_a8cf50fc24e7_key -iv $encrypted_a8cf50fc24e7_iv \
   -in secrets/${STUDENT}-env.sh.enc -out secrets.sh -d
 
 source ./secrets.sh
