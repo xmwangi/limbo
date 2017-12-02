@@ -36,5 +36,7 @@ if [ "$SLACK_TOKEN" = "" ]; then
   exit 1
 fi
 
+export IMAGE_THIS_BUILD=$BOTNAME:$TYPE
+
 bin/ecr_push.sh
 bin/ecs_deploy.sh $TRAVIS_BRANCH

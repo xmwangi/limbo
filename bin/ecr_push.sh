@@ -13,7 +13,7 @@ cat limbo-tmp | sed 's/docker login -u AWS -p \([^ ]*\) .*/\1/' \
 rm limbo-tmp
 
 docker tag tim77/limbo:latest \
-  560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77-rstata/limbo:latest
+  560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77/$IMAGE_THIS_BUILD
 
 docker push \
-  560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77-rstata/limbo:latest
+  560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77/$IMAGE_THIS_BUILD
