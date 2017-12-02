@@ -6,7 +6,7 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
 fi
 
 export IS_WIP=`expr "$TRAVIS_BRANCH" : ".*-\(wip$\)"`
-export IS_MASTER=`expr "$TRAVIS_BRANCH" : ".*-\(wip$\)"`
+export IS_MASTER=`expr "$TRAVIS_BRANCH" : ".*-\(master$\)"`
 export BOTNAME=`expr "$TRAVIS_BRANCH" : "\(.*\)-[a-z]*$"`
 
 if [ "$IS_WIP" = "wip" ]; then
