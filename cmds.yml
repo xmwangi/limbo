@@ -16,6 +16,7 @@ services:
       LIMBO_NEEDMENTION: 'true'
       AWS_ACCESS_KEY_ID:
       AWS_SECRET_ACCESS_KEY:
+      IMAGE_THIS_BUILD:
       SLACK_TOKEN:
     image: tim77/limbo-test
     entrypoint: /usr/local/bin/ecs-cli
