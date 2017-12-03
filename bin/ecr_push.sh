@@ -12,6 +12,5 @@ cat limbo-tmp | sed 's/docker login -u AWS -p \([^ ]*\) .*/\1/' \
 
 rm limbo-tmp
 
-$IMG=560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77/$IMAGE_THIS_BUILD
-docker tag tim77/limbo:latest $IMG
-docker push $IMG
+docker tag tim77/limbo:latest $IMAGE_THIS_BUILD
+docker push $IMAGE_THIS_BUILD

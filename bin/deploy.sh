@@ -50,7 +50,7 @@ if [ "$SLACK_TOKEN" = "" ]; then
   exit 1
 fi
 
-export IMAGE_THIS_BUILD=$BOTNAME:$TYPE
+export IMAGE_THIS_BUILD=560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77/$BOTNAME:$TYPE
 
 if [ "$1" = "up" ]; then
   bin/ecr_push.sh
