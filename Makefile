@@ -62,6 +62,6 @@ export BOTNAME := rstata-limbo
 travis_deploy:
 	bin/deploy.sh up
 
-.PHONY: ecs_down
-ecs_down:
+.PHONY: ecs_stop
+ecs_stop:
 	bin/deploy.sh down
