@@ -59,6 +59,11 @@ docker_run:
 docker_stop:
 	docker stop `docker ps -q --filter ancestor=tim77/limbo --format="{{.ID}}"`
 
+.PHONY: ecr_repo
+ecr_repo:
+	docker-compose -f cmds.yml run \
+	   aws ecr create-repository --region us-east-1 --repository-name tim77/${BOTNAME}
+
 .PHONY: travis_deploy
 travis_deploy: ecs_deploy_and_run
 
