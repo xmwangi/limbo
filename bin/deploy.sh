@@ -55,12 +55,10 @@ export IMAGE_THIS_BUILD=560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77/$BOTN
 if [ "$1" = "up" ]; then
   bin/ecr_push.sh
   docker-compose -f cmds.yml run \
-    ecs compose --region us-east-1 -c limbo \
-      --file docker-compose.yml --project-name $BOTNAME-$TYPE \
+    ecs compose --region us-east-1 -c limbo --project-name $BOTNAME-$TYPE \
       service up
 else
   docker-compose -f cmds.yml run \
-    ecs compose --region us-east-1 -c limbo \
-      --file docker-compose.yml --project-name $BOTNAME-$TYPE \
+    ecs compose --region us-east-1 -c limbo --project-name $BOTNAME-$TYPE \
       service rm
 fi
