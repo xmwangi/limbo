@@ -33,7 +33,7 @@ export TYPE=`expr "$THE_BRANCH" : ".*\(wip$\)"`
 if [ "$TYPE" != "wip" ]; then
   export TYPE=`expr "$THE_BRANCH" : ".*\(master$\)"`
   if [ "$TYPE" != "master" ]; then
-    echo Skipping travis_deploy for non-wip/master branch
+    echo Branch name does not end in "wip" or "master": skip deploy
     exit 0
   fi
 fi
