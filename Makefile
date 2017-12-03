@@ -1,6 +1,3 @@
-NAMESPACE=tim77
-APP=limbo
-
 .PHONY: testall
 testall: requirements
 	tox
@@ -44,17 +41,26 @@ flake8:
 
 .PHONY: docker_build
 docker_build:
-	docker build -f Dockerfile.test -t ${NAMESPACE}/${APP}-test .
-	docker build --build-arg BASE=${NAMESPACE}/${APP}-test -f Dockerfile.run -t ${NAMESPACE}/${APP} .
+	docker build -f Dockerfile.test -t tim77/limbo-test .
+	docker build --build-arg BASE=tim77/limbo-test -f Dockerfile.run -t tim77/limbo .
 
 .PHONY: docker_test
 docker_test:
-	docker run -e LANG=en_US.UTF-8 ${NAMESPACE}/${APP}-test
+	docker run -e LANG=en_US.UTF-8 tim77/limbo-test
 
 .PHONY: docker_run
 docker_run:
-	docker run -d -e SLACK_TOKEN=${SLACK_TOKEN} ${NAMESPACE}/${APP}
+	docker run -d -e SLACK_TOKEN=${SLACK_TOKEN} tim77/limbo
 
 .PHONY: docker_stop
 docker_stop:
-	docker stop `docker ps -q --filter ancestor=${NAMESPACE}/${APP} --format="{{.ID}}"`
+	docker stop `docker ps -q --filter ancestor=tim77/limbo --format="{{.ID}}"`
+
+export BOTNAME := rstata-limbo
+.PHONY: travis_deploy
+travis_deploy:
+	bin/deploy.sh up
+
+.PHONY: ecs_down
+ecs_down:
+	bin/deploy.sh down
