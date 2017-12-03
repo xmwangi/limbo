@@ -11,7 +11,7 @@ services:
     image: tim77/limbo-test
     entrypoint: [ "/usr/local/bin/aws" ]
 
-  ecs:
+  ecs-cli:
     environment:
       LIMBO_NEEDMENTION: 'true'
       AWS_ACCESS_KEY_ID:

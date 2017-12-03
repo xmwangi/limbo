@@ -1,3 +1,5 @@
+export BOTNAME := rstata-limbo
+
 .PHONY: testall
 testall: requirements
 	tox
@@ -57,9 +59,11 @@ docker_run:
 docker_stop:
 	docker stop `docker ps -q --filter ancestor=tim77/limbo --format="{{.ID}}"`
 
-export BOTNAME := rstata-limbo
 .PHONY: travis_deploy
-travis_deploy:
+travis_deploy: ecs_deploy_and_run
+
+.PHONY: ecs_deploy_and_run
+ecs_deploy_and_run:
 	bin/deploy.sh up
 
 .PHONY: ecs_stop
