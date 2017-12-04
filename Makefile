@@ -1,5 +1,4 @@
-NAMESPACE=tim77
-APP=limbo
+export BOTNAME := limbo-chaiken
 
 .PHONY: testall
 testall: requirements
@@ -44,17 +43,34 @@ flake8:
 
 .PHONY: docker_build
 docker_build:
-	docker build -f Dockerfile.test -t ${NAMESPACE}/${APP}-test .
-	docker build --build-arg BASE=${NAMESPACE}/${APP}-test -f Dockerfile.run -t ${NAMESPACE}/${APP} .
+	docker build -f Dockerfile.test -t tim77/limbo-test .
+	docker build --build-arg BASE=tim77/limbo-test -f Dockerfile.run -t tim77/limbo .
 
 .PHONY: docker_test
 docker_test:
-	docker run -e LANG=en_US.UTF-8 ${NAMESPACE}/${APP}-test
+	docker run -e LANG=en_US.UTF-8 tim77/limbo-test
 
 .PHONY: docker_run
 docker_run:
-	docker run -d -e SLACK_TOKEN=${SLACK_TOKEN} ${NAMESPACE}/${APP}
+	@# Suppress echo so slack token does not get shown
+	@docker run -e SLACK_TOKEN=${SLACK_TOKEN} tim77/limbo
 
 .PHONY: docker_stop
 docker_stop:
-	docker stop `docker ps -q --filter ancestor=${NAMESPACE}/${APP} --format="{{.ID}}"`
+	docker stop `docker ps -q --filter ancestor=tim77/limbo --format="{{.ID}}"`
+
+.PHONY: ecr_repo
+ecr_repo:
+	docker-compose -f cmds.yml run \
+	   aws ecr create-repository --region us-east-1 --repository-name tim77/${BOTNAME}
+
+.PHONY: travis_deploy
+travis_deploy: ecs_deploy_and_run
+
+.PHONY: ecs_deploy_and_run
+ecs_deploy_and_run:
+	bin/deploy.sh up
+
+.PHONY: ecs_stop
+ecs_stop:
+	bin/deploy.sh down
