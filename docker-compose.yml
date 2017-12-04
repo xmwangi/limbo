@@ -1,0 +1,8 @@
+version: "2"
+
+services:
+  limbo:
+    environment:
+      LIMBO_NEEDMENTION: 'true'
+      SLACK_TOKEN:
+    image: $IMAGE_THIS_BUILD
