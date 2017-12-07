@@ -65,12 +65,13 @@ ecr_repo:
 	   aws ecr create-repository --region us-east-1 --repository-name tim77/${BOTNAME}
 
 .PHONY: travis_deploy
-travis_deploy: ecs_deploy_and_run
+travis_deploy:
+	bin/deploy.sh update
 
-.PHONY: ecs_deploy_and_run
-ecs_deploy_and_run:
-	bin/deploy.sh up
+.PHONY: ecs_start
+ecs_start:
+	bin/deploy.sh start
 
 .PHONY: ecs_stop
 ecs_stop:
-	bin/deploy.sh down
+	bin/deploy.sh stop
