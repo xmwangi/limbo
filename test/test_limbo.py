@@ -245,4 +245,4 @@ def test_loop_hook():
     limbo.loop(server, metrics, test_loop=1)
 
     assert server._loop_plugin_ran == True
-    assert metrics._count == 0
+    assert metrics.count == 0
