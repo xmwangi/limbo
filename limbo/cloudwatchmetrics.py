@@ -3,31 +3,33 @@ import re
 
 class CloudWatchMetrics(object):
     VALID = "[^:&][^&]*(&[^&]*=[^&]*)*"
+
     def __init__(self, config):
         cfg = config["cloudwatch"]
-        if not re.match(VALID, cfg):
+        if not re.match(CloudWatchMetrics.VALID, cfg):
             e = ValueError("Bad CloudWatch configuration {0}.  Must match {1}."
-                           .format(cfg, VALID))
+                           .format(cfg, CloudWatchMetrics.VALID))
             logger.error(str(e))
             raise e
-        cfg = string.split(cfg, '&')
+        cfg = cfg.split('&')
         self._namespace = cfg[0]
         self._dims = []
         for dim in cfg[1:]:
-            nv = string.split(dim, '=')
+            nv = dim.split('=')
+            # TODO: add validity check
             self._dims.append({ 'Name': nv[0], 'Value': nv[1] })
-        self._client = boto3.client('cloudwatch')
+        self._client = boto3.client('cloudwatch', region_name='us-east-1')
         pass
 
     def events(self, count):
-        self._client.put_metrics_data(
+        self._client.put_metric_data(
             Namespace = self._namespace,
             MetricData = [
                 {
                     'MetricName': 'EventCount',
                     'Dimensions': self._dims,
                     'Value': 1,
-                    'Unit': 'Count'
+                    'Unit': 'None'
                 }
             ]
         )

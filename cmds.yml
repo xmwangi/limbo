@@ -5,7 +5,6 @@ version: "2"
 services:
   aws:
     environment:
-      LIMBO_NEEDMENTION: 'true'
       AWS_ACCESS_KEY_ID:
       AWS_SECRET_ACCESS_KEY:
     image: tim77/limbo-test
@@ -13,10 +12,11 @@ services:
 
   ecs-cli:
     environment:
-      LIMBO_NEEDMENTION: 'true'
       AWS_ACCESS_KEY_ID:
       AWS_SECRET_ACCESS_KEY:
       IMAGE_THIS_BUILD:
       SLACK_TOKEN:
+      LIMBO_NEEDMENTION: 'true'
+      LIMBO_CLOUDWATCH:
     image: tim77/limbo-test
     entrypoint: /usr/local/bin/ecs-cli
