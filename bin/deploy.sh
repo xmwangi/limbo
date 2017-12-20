@@ -51,6 +51,7 @@ if [ "$SLACK_TOKEN" = "" ]; then
 fi
 
 export IMAGE_THIS_BUILD=560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77/$BOTNAME:$TYPE
+export LIMBO_CLOUDWATCH="Limbo&Botname=${BOTNAME}&Env=${TYPE}"
 
 case "$1" in
   start)

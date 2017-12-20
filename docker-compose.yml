@@ -3,6 +3,15 @@ version: "2"
 services:
   limbo:
     environment:
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
       LIMBO_NEEDMENTION: 'true'
+      LIMBO_CLOUDWATCH:
       SLACK_TOKEN:
     image: $IMAGE_THIS_BUILD
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-east-1
+        awslogs-group: limbo
+        awslogs-stream-prefix: $BOTNAME
