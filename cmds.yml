@@ -18,5 +18,6 @@ services:
       SLACK_TOKEN:
       LIMBO_NEEDMENTION: 'true'
       LIMBO_CLOUDWATCH:
+      BOTNAME:
     image: tim77/limbo-test
     entrypoint: /usr/local/bin/ecs-cli
