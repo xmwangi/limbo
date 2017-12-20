@@ -29,7 +29,7 @@ class CloudWatchMetrics(object):
                     'MetricName': 'EventCount',
                     'Dimensions': self._dims,
                     'Value': count,
-                    'Unit': 'None'
+                    'Unit': 'Count'
                 }
             ]
         )
