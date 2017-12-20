@@ -2,7 +2,7 @@ import boto3
 import re
 
 class CloudWatchMetrics(object):
-    VALID = "[^:&][^&]*(&[^&]*=[^&]*)*"
+    VALID = "[a-zA-Z0-9_-]+(&[a-zA-Z0-9_-]+=[^&]*)*"
 
     def __init__(self, config):
         cfg = config["cloudwatch"]
@@ -16,7 +16,6 @@ class CloudWatchMetrics(object):
         self._dims = []
         for dim in cfg[1:]:
             nv = dim.split('=')
-            # TODO: add validity check
             self._dims.append({ 'Name': nv[0], 'Value': nv[1] })
         self._client = boto3.client('cloudwatch', region_name='us-east-1')
         pass
