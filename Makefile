@@ -50,10 +50,10 @@ docker_build:
 docker_test:
 	docker run -e LANG=en_US.UTF-8 tim77/limbo-test
 
-export IMAGE_THIS_BUILD := tim77/limbo
 .PHONY: docker_run
 docker_run:
-	docker-compose -f docker-compose.yml run limbo
+	@# Suppress echo so slack token does not get shown
+	@docker run -e SLACK_TOKEN=${SLACK_TOKEN} tim77/limbo
 
 .PHONY: docker_stop
 docker_stop:
