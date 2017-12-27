@@ -58,7 +58,9 @@ case "$1" in
     bin/ecr_push.sh
     docker-compose --file cmds.yml run \
       ecs-cli compose --file docker-compose.yml --region us-east-1 --cluster limbo \
-        --project-name $SERVICE_NAME-$TYPE service up
+        --project-name $SERVICE_NAME-$TYPE \
+        --task-role-arn arn:aws:iam::560921689673:role/LimboTaskRole \
+        service up
     ;;
 
   stop)
@@ -73,7 +75,9 @@ case "$1" in
       bin/ecr_push.sh
       docker-compose --file cmds.yml run \
         ecs-cli compose --file docker-compose.yml --region us-east-1 --cluster limbo \
-          --project-name $SERVICE_NAME-$TYPE service up
+          --project-name $SERVICE_NAME-$TYPE \
+          --task-role-arn arn:aws:iam::560921689673:role/LimboTaskRole \
+          service up
     else
       echo "Service not running, so not pushing an update."
     fi
