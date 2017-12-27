@@ -63,7 +63,9 @@ def init_plugins(plugindir, plugins_to_load=None):
         except OSError:
             raise InvalidPluginDir(plugindir)
 
-    hooks = {}
+    # Remember the plugin directory for reinit_plugins.
+    # This extra entry in hooks increases the number of expected hooks in test_limbo.py.
+    hooks = {'plugindir': plugindir}
 
     oldpath = copy.deepcopy(sys.path)
     sys.path.insert(0, plugindir)
@@ -97,13 +99,22 @@ def init_plugins(plugindir, plugins_to_load=None):
     sys.path = oldpath
     return hooks
 
+def reinit_plugins(plugins_to_load, msg, server):
+    logger.info("reinit_plugins: {0}".format(plugins_to_load))
+    server.hooks = init_plugins(server.hooks['plugindir'], plugins_to_load)
+
 def run_hook(hooks, hook, *args):
     responses = []
     for hook in hooks.get(hook, []):
         try:
             h = hook(*args)
-            if h:
-                responses.append(h)
+            if type(h) is str:
+                responses.append(h) # this is the normal case
+            elif type(h) is list:
+                logger.debug("checking hook list response: {0}".format(h[0]))
+                if h[0] == 'reinit_plugins':
+                    responses.append(h[2]) # h[2] is the string response
+                    reinit_plugins(h[1], *args) # h[1] is an array of plugins to load
         except:
             logger.warning("Failed to run plugin {0}, module not loaded".format(hook))
             logger.warning("{0}".format(sys.exc_info()[0]))
