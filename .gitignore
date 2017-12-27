@@ -16,3 +16,4 @@ slask.egg-info/
 .vagrant
 .python-version
 .cache
+*~
