@@ -137,7 +137,7 @@ def handle_message(event, server):
         return
 
     # skip messages that don't include our username 
-    if server.config.get("needmention"):
+    if server.config.get("needmention") == "true":
         text = event.get("text", "")
         # TODO: make sure server.slack.userid is RE-safe
         match = re.search("<@{}>".format(server.slack.userid), text)
