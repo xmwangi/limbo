@@ -15,6 +15,8 @@ import traceback
 from .slack import SlackClient, SlackConnectionError, SlackLoginError
 from .server import LimboServer
 from .fakeserver import FakeServer
+from .nullmetrics import NullMetrics
+from .cloudwatchmetrics import CloudWatchMetrics
 
 CURDIR = os.path.abspath(os.path.dirname(__file__))
 DIR = functools.partial(os.path.join, CURDIR)
@@ -135,7 +137,7 @@ def handle_message(event, server):
         return
 
     # skip messages that don't include our username 
-    if server.config.get("needmention"):
+    if server.config.get("needmention") == "true":
         text = event.get("text", "")
         # TODO: make sure server.slack.userid is RE-safe
         match = re.search("<@{}>".format(server.slack.userid), text)
@@ -172,15 +174,17 @@ def init_config():
     getif(config, "loglevel", "LIMBO_LOGLEVEL")
     getif(config, "logfile", "LIMBO_LOGFILE")
     getif(config, "logformat", "LIMBO_LOGFORMAT")
+    getif(config, "cloudwatch", "LIMBO_CLOUDWATCH")
     getif(config, "plugins", "LIMBO_PLUGINS")
     getif(config, "needmention", "LIMBO_NEEDMENTION")
 
     return config
 
-def loop(server, test_loop=None):
+def loop(server, metrics, test_loop=None):
     """Run the main loop
 
     server is a limbo Server object
+    metrics is an object for recording metrics (right now, event counts)
     test_loop, if present, is a number of times to run the loop
     """
     try:
@@ -217,6 +221,9 @@ def loop(server, test_loop=None):
                     # to be safe
                     server.slack.rtm_send_message(event["channel"], response[:1000], thread_ts)
                     response = response[1000:]
+
+            # Record number of events just processed
+            metrics.events(len(events))
 
             # Run the loop hook. This doesn't send messages it receives,
             # because it doesn't know where to send them. Use
@@ -279,6 +286,10 @@ export SLACK_TOKEN=<your-slack-bot-token>
     server = Server(slack, config, hooks, db)
     return server
 
+def init_metrics(config):
+    Metrics = NullMetrics if not config.get("cloudwatch") else CloudWatchMetrics
+    return Metrics(config)
+
 # decode a string. if str is a python 3 string, do nothing.
 def decode(str_, codec='utf8'):
     if PYTHON3:
@@ -305,13 +316,14 @@ def main(args):
         return
 
     server = init_server(args, config)
+    metrics = init_metrics(config)
 
     try:
         server.slack.rtm_connect()
         # run init hook. This hook doesn't send messages to the server (ought it?)
         run_hook(server.hooks, "init", server)
 
-        loop(server)
+        loop(server, metrics)
     except SlackConnectionError:
         logger.warn("Unable to connect to Slack. Bad network?")
         raise

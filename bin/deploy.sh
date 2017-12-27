@@ -14,8 +14,8 @@
 # or WIP_SLACK_TOKEN must be defined (based on whether this is master
 # or WIP deploy).
 
-if [ $# -ne 1 ] || ([ "$1" != "up" ] && [ "$1" != "down" ]); then
-  echo "Usage: $0 up|down"
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 start|stop|update"
   exit 1
 fi
 
@@ -51,16 +51,35 @@ if [ "$SLACK_TOKEN" = "" ]; then
 fi
 
 export IMAGE_THIS_BUILD=560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77/$BOTNAME:$TYPE
+export LIMBO_CLOUDWATCH="Limbo&Botname=${BOTNAME}&Env=${TYPE}"
 
-if [ "$1" = "up" ]; then
-  bin/ecr_push.sh
-  # Note: the following reads docker-compose.yml for deployment instructions
-  docker-compose --file cmds.yml run \
-    ecs-cli compose --file docker-compose.yml --region us-east-1 --cluster limbo \
-      --project-name $BOTNAME-$TYPE service up
-else
-  # Note: the following reads docker-compose.yml for deployment instructions
-  docker-compose --file cmds.yml run \
-    ecs-cli compose --file docker-compose.yml --region us-east-1 --cluster limbo \
-      --project-name $BOTNAME-$TYPE service rm
-fi
+case "$1" in
+  start)
+    bin/ecr_push.sh
+    docker-compose --file cmds.yml run \
+      ecs-cli compose --file docker-compose.yml --region us-east-1 --cluster limbo \
+        --project-name $BOTNAME-$TYPE service up
+    ;;
+
+  stop)
+    docker-compose --file cmds.yml run \
+      ecs-cli compose --file docker-compose.yml --region us-east-1 --cluster limbo \
+        --project-name $BOTNAME-$TYPE service rm
+    ;;
+
+  update)
+    if (docker-compose --file cmds.yml run ecs-cli ps --region us-east-1 --cluster limbo \
+         | grep RUNNING | grep $BOTNAME); then
+      bin/ecr_push.sh
+      docker-compose --file cmds.yml run \
+        ecs-cli compose --file docker-compose.yml --region us-east-1 --cluster limbo \
+          --project-name $BOTNAME-$TYPE service up
+    else
+      echo "Service not running, so not pushing an update."
+    fi
+    ;;
+
+  *)
+    echo "Usage: $0 start|update|stop"
+    exit 1
+esac
