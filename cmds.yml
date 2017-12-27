@@ -16,7 +16,7 @@ services:
       AWS_SECRET_ACCESS_KEY:
       IMAGE_THIS_BUILD:
       SLACK_TOKEN:
-      LIMBO_NEEDMENTION: 'true'
+      LIMBO_NEEDMENTION:
       LIMBO_CLOUDWATCH:
       BOTNAME:
     image: tim77/limbo-test
