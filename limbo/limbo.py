@@ -63,9 +63,7 @@ def init_plugins(plugindir, plugins_to_load=None):
         except OSError:
             raise InvalidPluginDir(plugindir)
 
-    # Remember the plugin directory for reinit_plugins.
-    # This extra entry in hooks increases the number of expected hooks in test_limbo.py.
-    hooks = {'plugindir': plugindir}
+    hooks = {}
 
     oldpath = copy.deepcopy(sys.path)
     sys.path.insert(0, plugindir)
@@ -98,10 +96,6 @@ def init_plugins(plugindir, plugins_to_load=None):
 
     sys.path = oldpath
     return hooks
-
-def reinit_plugins(plugins_to_load, server):
-    logger.info("reinit_plugins: {0}".format(plugins_to_load))
-    server.hooks = init_plugins(server.hooks['plugindir'], plugins_to_load)
 
 def run_hook(hooks, hook, *args):
     responses = []
@@ -272,6 +266,7 @@ def init_server(args, config, Server=LimboServer, Client=SlackClient):
 
     config_plugins = config.get("plugins")
     plugins_to_load = config_plugins.split(",") if config_plugins else []
+    config['pluginpath'] = args.pluginpath
 
     hooks = init_plugins(args.pluginpath, plugins_to_load)
     try:

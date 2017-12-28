@@ -26,7 +26,7 @@ os.environ["LIMBO_LOGFILE"] = "/tmp/deleteme"
 
 def test_plugin_success():
     hooks = limbo.init_plugins("test/plugins")
-    assert len(hooks) == 10
+    assert len(hooks) == 9
     assert "message" in hooks
     assert isinstance(hooks, dict)
     assert isinstance(hooks["message"], list)
@@ -34,7 +34,7 @@ def test_plugin_success():
 
 def test_config_plugin_none_success():
     hooks = limbo.init_plugins("test/plugins", None)
-    assert len(hooks) == 10
+    assert len(hooks) == 9
     assert "message" in hooks
     assert isinstance(hooks, dict)
     assert isinstance(hooks["message"], list)
@@ -42,7 +42,7 @@ def test_config_plugin_none_success():
 
 def test_config_plugin_empty_string_success():
     hooks = limbo.init_plugins("test/plugins", "")
-    assert len(hooks) == 10
+    assert len(hooks) == 9
     assert "message" in hooks
     assert isinstance(hooks, dict)
     assert isinstance(hooks["message"], list)
@@ -50,7 +50,7 @@ def test_config_plugin_empty_string_success():
 
 def test_config_plugin_success():
     hooks = limbo.init_plugins("test/plugins", "echo,loop")
-    assert len(hooks) == 6
+    assert len(hooks) == 5
     assert "message" in hooks
     assert isinstance(hooks, dict)
     assert isinstance(hooks["message"], list)
@@ -58,7 +58,7 @@ def test_config_plugin_success():
 
 def test_config_plugin_doesnt_exist():
     hooks = limbo.init_plugins("test/plugins", "doesnotexist")
-    assert len(hooks) == 1
+    assert len(hooks) == 0
 
 def test_plugin_invalid_dir():
     try:
