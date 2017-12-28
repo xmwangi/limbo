@@ -1,4 +1,4 @@
-export BOTNAME := limbo-travisci
+export BOTNAME := limbo-chaiken
 
 .PHONY: testall
 testall: requirements
