@@ -1,4 +1,5 @@
-export BOTNAME ?= limbo-travisci
+ACCT_NAME := $(shell git remote get-url origin | sed 's|.*[:/]\([^:/]*\)/[^/]*$$|\1|')
+export SERVICE_NAME ?= $(ACCT_NAME)
 
 .PHONY: testall
 testall: requirements
@@ -62,7 +63,7 @@ docker_stop:
 .PHONY: ecr_repo
 ecr_repo:
 	docker-compose -f cmds.yml run \
-	   aws ecr create-repository --region us-east-1 --repository-name tim77/${BOTNAME}
+	   aws ecr create-repository --region us-east-1 --repository-name tim77/${SERVICE_NAME}
 
 .PHONY: travis_deploy
 travis_deploy:

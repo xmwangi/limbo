@@ -5,7 +5,7 @@
 #
 # In both cases, the standard AWS_ environment variables need to be
 # defined to provide the AWS credentials for accessing ECR and ECS.
-# Also, BOTNAME must be defined, which determines both the name of the
+# Also, SERVICE_NAME must be defined, which determines both the name of the
 # image in the Docker registry and the name of the service in ECS.
 #
 # When running on a laptop, `git symbolic-ref --short HEAD` is used in
@@ -50,30 +50,30 @@ if [ "$SLACK_TOKEN" = "" ]; then
   exit 1
 fi
 
-export IMAGE_THIS_BUILD=560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77/$BOTNAME:$TYPE
-export LIMBO_CLOUDWATCH="Limbo&Botname=${BOTNAME}&Env=${TYPE}"
+export IMAGE_THIS_BUILD=560921689673.dkr.ecr.us-east-1.amazonaws.com/tim77/$SERVICE_NAME:$TYPE
+export LIMBO_CLOUDWATCH="Limbo&Botname=${SERVICE_NAME}&Env=${TYPE}"
 
 case "$1" in
   start)
     bin/ecr_push.sh
     docker-compose --file cmds.yml run \
       ecs-cli compose --file docker-compose.yml --region us-east-1 --cluster limbo \
-        --project-name $BOTNAME-$TYPE service up
+        --project-name $SERVICE_NAME-$TYPE service up
     ;;
 
   stop)
     docker-compose --file cmds.yml run \
       ecs-cli compose --file docker-compose.yml --region us-east-1 --cluster limbo \
-        --project-name $BOTNAME-$TYPE service rm
+        --project-name $SERVICE_NAME-$TYPE service rm
     ;;
 
   update)
     if (docker-compose --file cmds.yml run ecs-cli ps --region us-east-1 --cluster limbo \
-         | grep RUNNING | grep $BOTNAME); then
+         | grep RUNNING | grep $SERVICE_NAME); then
       bin/ecr_push.sh
       docker-compose --file cmds.yml run \
         ecs-cli compose --file docker-compose.yml --region us-east-1 --cluster limbo \
-          --project-name $BOTNAME-$TYPE service up
+          --project-name $SERVICE_NAME-$TYPE service up
     else
       echo "Service not running, so not pushing an update."
     fi

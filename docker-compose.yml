@@ -15,4 +15,4 @@ services:
       options:
         awslogs-region: us-east-1
         awslogs-group: limbo
-        awslogs-stream-prefix: $BOTNAME
+        awslogs-stream-prefix: $SERVICE_NAME
