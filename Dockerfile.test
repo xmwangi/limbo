@@ -26,13 +26,21 @@ RUN chmod +x /usr/local/bin/ecs-cli
 RUN mkdir -p /opt /app
 WORKDIR /app
 
+RUN apt-get -y install libjpeg8-dev
 ADD requirements.txt /app
 RUN pip install -r requirements.txt
+RUN pip install --upgrade \
+  https://storage.googleapis.com/tensorflow/linux/cpu/protobuf-3.1.0-cp35-none-linux_x86_64.whl
+ADD force_keras_model.py /app
+RUN python3 force_keras_model.py
+
 
 ADD . /app
 RUN python3 setup.py install
 
 RUN rm -rf build dist limbo.egg-info
+
+ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION python
 
 CMD pytest --cov=limbo --cov-report term-missing test
 

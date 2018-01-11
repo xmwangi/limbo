@@ -6,7 +6,7 @@ import sys
 DIR = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.join(DIR, '../../limbo/plugins'))
 
-from google import on_message
+from google_search import on_message
 
 """
 These are a bit hard to test for SPECIFIC requirements.

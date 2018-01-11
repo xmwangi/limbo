@@ -130,14 +130,14 @@ def handle_message(event, server):
     subtype = event.get("subtype", "message")
     user_id = get_user_id_from_message(event, subtype)
 
-    # skip messages from ourselves and from slackbot to prevent message loops
-    if not user_id or user_id == server.slack.userid or user_id == "USLACKBOT":
+    # skip messages from slackbot to prevent message loops
+    if not user_id or user_id == "USLACKBOT":
         logger.debug("skipping message {} no user found or user is "
             "self".format(event))
         return
 
     # skip messages that don't include our username 
-    if server.config.get("needmention") == "true":
+    if server.config.get("needmention") == "false":
         text = event.get("text", "")
         # TODO: make sure server.slack.userid is RE-safe
         match = re.search("<@{}>".format(server.slack.userid), text)

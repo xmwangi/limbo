@@ -23,6 +23,9 @@ tox
 # banner plugin
 pyfiglet
 
+# classify image plugin
+keras
+
 #slack
 websocket-client
 

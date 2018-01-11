@@ -4,7 +4,8 @@ import requests
 
 def location():
   response = requests.get("http://freegeoip.net/json").json()
-  return response['city'] + ', ' + response['country']
+  print(response)
+  return response['ip'] + ' (' + response['city'] + ', ' + response['country_name'] + ')'
 
 def on_message(msg, server):
     text = msg.get("text", "")

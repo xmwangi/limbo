@@ -36,3 +36,9 @@ virtualenv==15.1.0
 webencodings==0.5.1
 websocket-client==0.44.0
 wrapt==1.10.10
+protobuf==3.0.0
+tensorflow==1.4.0
+h5py==2.7.1
+pillow==2.1.0
+keras==2.0.9
+urlextract==0.7

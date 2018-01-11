@@ -92,36 +92,9 @@ def test_handle_message_subtype():
     event["subtype"] = "message_changed"
     assert limbo.handle_message(event, server) == None
 
-def test_handle_message_ignores_self():
-    server = limbo.FakeServer()
-    event = {"user": "1", "type": "message", "id": "1"}
-    assert limbo.handle_message(event, server) == None
-
 def test_handle_message_ignores_slackbot():
     server = limbo.FakeServer()
     event = {"user": "USLACKBOT"}
-    assert limbo.handle_message(event, server) == None
-
-def test_handle_message_ignores_nomention():
-    msg = u"!echo Iñtërnâtiônàlizætiøn bot"
-    event = {"bot_id": "2", "text": msg, "subtype": "bot_message"}
-
-    config = {"needmention": "true"}
-    slack = limbo.FakeSlack()
-    hooks = limbo.init_plugins("test/plugins")
-    server = limbo.FakeServer(config=config, slack=slack, hooks=hooks)
-
-    assert limbo.handle_message(event, server) == None
-
-def test_handle_message_ignores_wrongmention():
-    msg = u"!echo Iñtërnâtiônàlizætiøn bot <@3>"
-    event = {"bot_id": "2", "text": msg, "subtype": "bot_message"}
-
-    config = {"needmention": "true"}
-    slack = limbo.FakeSlack()
-    hooks = limbo.init_plugins("test/plugins")
-    server = limbo.FakeServer(config=config, slack=slack, hooks=hooks)
-
     assert limbo.handle_message(event, server) == None
 
 def test_handle_message_handles_mention():
